@@ -3,7 +3,7 @@ import { getRequestContext } from '@cloudflare/next-on-pages';
 import { getAuthCookie, verifyToken } from '@/lib/auth';
 import { getFavoriteIds, toggleFavorite } from '@/lib/db';
 import { getQuestionsByIds } from '@/lib/questions';
-import { Language } from '@/lib/types';
+import { Language, UserProgress } from '@/lib/types';
 
 export const runtime = 'edge';
 
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { env } = getRequestContext();
+    const { env }: { env: any } = getRequestContext();
     const payload = await verifyToken(token, env.JWT_SECRET);
 
     if (!payload) {
@@ -77,7 +77,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { env } = getRequestContext();
+    const { env }: { env: any } = getRequestContext();
     const payload = await verifyToken(token, env.JWT_SECRET);
 
     if (!payload) {
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    const body: UserProgress = await request.json();
     const { ticketId } = body;
 
     if (typeof ticketId !== 'number') {

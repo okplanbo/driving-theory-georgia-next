@@ -46,6 +46,7 @@ export interface UserProgress {
 export interface UserPreferences {
   preferredLanguage: Language;
   prioritizeWeak: boolean;
+  authenticated?: boolean;
 }
 
 // Exam history entry

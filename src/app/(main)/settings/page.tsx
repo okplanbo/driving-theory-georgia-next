@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { SimpleCheckbox } from '@/components/ui/checkbox';
-import { Language } from '@/lib/types';
+import { ApiResponse, Language } from '@/lib/types';
 import { 
   Loader2, 
   Settings, 
@@ -47,11 +47,11 @@ export default function SettingsPage() {
       const response = await fetch(
         `/api/progress/exclusions?includeQuestions=true&lang=${preferences.preferredLanguage}`
       );
-      const data = await response.json();
+      const data: ApiResponse<{ questions: ExcludedQuestion[]; excludedIds: number[] }> = await response.json();
 
       if (data.success) {
-        setExcludedQuestions(data.data.questions || []);
-        setExcludedCount(data.data.excludedIds?.length || 0);
+        setExcludedQuestions(data.data!.questions || []);
+        setExcludedCount(data.data!.excludedIds?.length || 0);
       }
     } catch (err) {
       console.error('Error fetching exclusions:', err);

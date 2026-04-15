@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { getAuthCookie, verifyToken } from '@/lib/auth';
 import { recordAnswer, getUserProgress } from '@/lib/db';
+import { ProgressUpdateRequest } from '@/lib/types';
 
 export const runtime = 'edge';
 
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { env } = getRequestContext();
+    const { env }: { env: any } = getRequestContext();
     const payload = await verifyToken(token, env.JWT_SECRET);
 
     if (!payload) {
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    const body: ProgressUpdateRequest = await request.json();
     const { ticketId, isCorrect } = body;
 
     if (typeof ticketId !== 'number' || typeof isCorrect !== 'boolean') {
@@ -67,7 +68,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { env } = getRequestContext();
+    const { env }: { env: any } = getRequestContext();
     const payload = await verifyToken(token, env.JWT_SECRET);
 
     if (!payload) {

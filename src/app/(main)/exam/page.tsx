@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Question, ExamAnswer } from '@/lib/types';
+import { Question, ExamAnswer, ApiResponse } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { 
   Loader2, 
@@ -43,10 +43,10 @@ export default function ExamPage() {
 
     try {
       const response = await fetch('/api/questions/exam-set');
-      const data = await response.json();
+      const data: ApiResponse<{ questions: Question[] }> = await response.json();
 
       if (data.success) {
-        setQuestions(data.data.questions);
+        setQuestions(data.data!.questions);
         setExamStarted(true);
         setTimeRemaining(EXAM_TIME_LIMIT);
         startTimeRef.current = Date.now();
@@ -97,7 +97,7 @@ export default function ExamPage() {
           body: JSON.stringify({ answers, durationSeconds }),
         });
 
-        const data = await response.json();
+        const data: ApiResponse<{ correctCount: number; totalCount: number }> = await response.json();
         
         if (data.success) {
           // Store results in sessionStorage for results page
@@ -180,7 +180,7 @@ export default function ExamPage() {
           body: JSON.stringify({ answers: finalAnswers, durationSeconds }),
         });
 
-        const data = await response.json();
+        const data: ApiResponse<{ correctCount: number; totalCount: number }> = await response.json();
         
         if (data.success) {
           sessionStorage.setItem('examResults', JSON.stringify({

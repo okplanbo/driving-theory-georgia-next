@@ -12,17 +12,17 @@ export async function GET(request: NextRequest) {
     if (!token) {
       return NextResponse.json({
         success: true,
-        data: { authenticated: false },
+        data: { isAuthenticated: false },
       });
     }
 
-    const { env } = getRequestContext();
+    const { env }: { env: any } = getRequestContext();
     const payload = await verifyToken(token, env.JWT_SECRET);
 
     if (!payload) {
       return NextResponse.json({
         success: true,
-        data: { authenticated: false },
+        data: { isAuthenticated: false },
       });
     }
 
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
     if (!user) {
       return NextResponse.json({
         success: true,
-        data: { authenticated: false },
+        data: { isAuthenticated: false },
       });
     }
 
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: {
-        authenticated: true,
+        isAuthenticated: true,
         user: {
           id: user.id,
           email: user.email,
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     console.error('Auth check error:', error);
     return NextResponse.json({
       success: true,
-      data: { authenticated: false },
+      data: { isAuthenticated: false },
     });
   }
 }

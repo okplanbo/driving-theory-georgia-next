@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { env } = getRequestContext();
+    const { env }: { env: any } = getRequestContext();
     const payload = await verifyToken(token, env.JWT_SECRET);
 
     if (!payload) {

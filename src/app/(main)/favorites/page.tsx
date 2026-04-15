@@ -14,6 +14,7 @@ import {
   Shuffle,
   BookOpen
 } from 'lucide-react';
+import { ApiResponse } from '@/lib/types';
 
 interface FavoriteQuestion {
   ticketId: number;
@@ -41,10 +42,10 @@ export default function FavoritesPage() {
         const response = await fetch(
           `/api/progress/favorites?includeQuestions=true&lang=${preferences.preferredLanguage}`
         );
-        const data = await response.json();
+        const data: ApiResponse<{ questions: FavoriteQuestion[] }> = await response.json();
 
         if (data.success) {
-          setFavorites(data.data.questions || []);
+          setFavorites(data.data!.questions || []);
         }
       } catch (err) {
         console.error('Error fetching favorites:', err);

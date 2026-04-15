@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SimpleCheckbox } from '@/components/ui/checkbox';
-import { UserStats, WeakQuestion, ExamHistoryEntry } from '@/lib/types';
+import { UserStats, WeakQuestion, ExamHistoryEntry, ApiResponse } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { 
   Loader2, 
@@ -39,10 +39,10 @@ export default function StatsPage() {
     const fetchStats = async () => {
       try {
         const response = await fetch(`/api/progress/stats?lang=${preferences.preferredLanguage}`);
-        const data = await response.json();
+        const data: ApiResponse<UserStats> = await response.json();
 
         if (data.success) {
-          setStats(data.data);
+          setStats(data.data!);
         } else {
           setError(data.error || 'Failed to load stats');
         }

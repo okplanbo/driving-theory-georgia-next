@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
-import { Language, UserPreferences } from '@/lib/types';
+import { ApiResponse, Language, UserPreferences } from '@/lib/types';
 
 interface User {
   id: string;
@@ -35,11 +35,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshAuth = useCallback(async () => {
     try {
       const response = await fetch('/api/auth/me');
-      const data = await response.json();
+      const data: ApiResponse<AuthContextType> = await response.json();
 
-      if (data.success && data.data.authenticated) {
-        setUser(data.data.user);
-        setPreferences(data.data.preferences || defaultPreferences);
+      if (data.success && data.data!.isAuthenticated) {
+        setUser(data.data!.user);
+        setPreferences(data.data!.preferences || defaultPreferences);
       } else {
         setUser(null);
         // Try to get language from localStorage for guests
@@ -68,7 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const data: ApiResponse<AuthContextType> = await response.json();
 
       if (data.success) {
         await refreshAuth();
@@ -90,7 +90,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const data: ApiResponse<AuthContextType> = await response.json();
 
       if (data.success) {
         await refreshAuth();

@@ -1,16 +1,26 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { Suspense, useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { QuestionCard } from '@/components/QuestionCard';
 import { GuestWarningBanner } from '@/components/GuestWarningBanner';
 import { useAuth } from '@/hooks/useAuth';
 import { useProgress } from '@/hooks/useProgress';
-import { Question } from '@/lib/types';
+import { ApiResponse, Question } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { BASE_QUESTION_COUNT } from '@/constants';
 
-export default function PracticePage() {
+// Loading fallback component
+function PracticeLoading() {
+  return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <Loader2 className="w-8 h-8 animate-spin text-primary" />
+    </div>
+  );
+}
+
+// Inner component that uses useSearchParams
+function PracticeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isAuthenticated, isLoading: authLoading, preferences } = useAuth();
@@ -31,10 +41,10 @@ export default function PracticePage() {
 
     try {
       const response = await fetch(`/api/questions/${id}`);
-      const data = await response.json();
+      const data: ApiResponse<Question> = await response.json();
 
       if (data.success) {
-        setQuestion(data.data);
+        setQuestion(data.data!);
       } else {
         setError(data.error || 'Failed to load question');
       }
@@ -53,12 +63,12 @@ export default function PracticePage() {
 
     try {
       const response = await fetch('/api/questions/random');
-      const data = await response.json();
+      const data: ApiResponse<Question> = await response.json();
 
       if (data.success) {
-        setQuestion(data.data);
+        setQuestion(data.data!);
         // Update URL without triggering navigation
-        router.replace(`/practice?id=${data.data.ticket_id}`, { scroll: false });
+        router.replace(`/practice?id=${data.data!.ticket_id}`, { scroll: false });
       } else {
         setError(data.error || 'Failed to load question');
       }
@@ -122,11 +132,7 @@ export default function PracticePage() {
 
   // Loading state
   if (authLoading || isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
+    return <PracticeLoading />;
   }
 
   // Error state
@@ -179,5 +185,14 @@ export default function PracticePage() {
         onToggleExcluded={handleToggleExcluded}
       />
     </div>
+  );
+}
+
+// Page component with Suspense boundary
+export default function PracticePage() {
+  return (
+    <Suspense fallback={<PracticeLoading />}>
+      <PracticeContent />
+    </Suspense>
   );
 }

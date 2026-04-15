@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from './useAuth';
+import { ApiResponse } from '@/lib/types';
 
 interface UseProgressReturn {
   favoriteIds: Set<number>;
@@ -35,14 +36,14 @@ export function useProgress(): UseProgressReturn {
         fetch('/api/progress/exclusions'),
       ]);
 
-      const favData = await favResponse.json();
-      const exclData = await exclResponse.json();
+      const favData: ApiResponse<{ favoriteIds: number[] }> = await favResponse.json();
+      const exclData: ApiResponse<{ excludedIds: number[] }> = await exclResponse.json();
 
       if (favData.success) {
-        setFavoriteIds(new Set(favData.data.favoriteIds));
+        setFavoriteIds(new Set(favData.data?.favoriteIds));
       }
       if (exclData.success) {
-        setExcludedIds(new Set(exclData.data.excludedIds));
+        setExcludedIds(new Set(exclData.data?.excludedIds));
       }
     } catch (error) {
       console.error('Failed to fetch progress:', error);
@@ -76,11 +77,11 @@ export function useProgress(): UseProgressReturn {
         body: JSON.stringify({ ticketId }),
       });
 
-      const data = await response.json();
+      const data: ApiResponse<{ isFavorite: boolean }> = await response.json();
       if (data.success) {
         setFavoriteIds((prev) => {
           const next = new Set(prev);
-          if (data.data.isFavorite) {
+          if (data.data?.isFavorite) {
             next.add(ticketId);
           } else {
             next.delete(ticketId);
@@ -116,11 +117,11 @@ export function useProgress(): UseProgressReturn {
         body: JSON.stringify({ ticketId }),
       });
 
-      const data = await response.json();
+      const data: ApiResponse<{ isExcluded: boolean }> = await response.json();
       if (data.success) {
         setExcludedIds((prev) => {
           const next = new Set(prev);
-          if (data.data.isExcluded) {
+          if (data.data?.isExcluded) {
             next.add(ticketId);
           } else {
             next.delete(ticketId);

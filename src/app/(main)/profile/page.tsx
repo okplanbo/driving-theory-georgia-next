@@ -16,6 +16,7 @@ import {
   AlertCircle,
   ArrowLeft
 } from 'lucide-react';
+import { ApiResponse } from '@/lib/types';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -65,7 +66,7 @@ export default function ProfilePage() {
         body: JSON.stringify({ currentPassword, newPassword }),
       });
 
-      const data = await response.json();
+      const data: ApiResponse = await response.json();
 
       if (data.success) {
         setSuccess(true);

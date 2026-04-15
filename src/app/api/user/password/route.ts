@@ -22,7 +22,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { env } = getRequestContext();
+    const { env }: { env: any } = getRequestContext();
     const payload = await verifyToken(token, env.JWT_SECRET);
 
     if (!payload) {
@@ -32,7 +32,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    const body: { currentPassword: string; newPassword: string } = await request.json();
     const { currentPassword, newPassword } = body;
 
     if (!currentPassword || !newPassword) {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getRequestContext } from '@cloudflare/next-on-pages';
 import { getAuthCookie, verifyToken } from '@/lib/auth';
 import { getUserPreferences, upsertUserPreferences } from '@/lib/db';
-import { Language } from '@/lib/types';
+import { Language, UserPreferences } from '@/lib/types';
 
 export const runtime = 'edge';
 
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { env } = getRequestContext();
+    const { env }: { env: any } = getRequestContext();
     const payload = await verifyToken(token, env.JWT_SECRET);
 
     if (!payload) {
@@ -55,7 +55,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const { env } = getRequestContext();
+    const { env }: { env: any } = getRequestContext();
     const payload = await verifyToken(token, env.JWT_SECRET);
 
     if (!payload) {
@@ -65,7 +65,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    const body: UserPreferences = await request.json();
     const { preferredLanguage, prioritizeWeak } = body;
 
     // Validate language if provided

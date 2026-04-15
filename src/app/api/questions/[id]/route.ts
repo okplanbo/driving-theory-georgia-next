@@ -5,10 +5,11 @@ export const runtime = 'edge';
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const ticketId = parseInt(params.id, 10);
+    const resolvedParams = await params;
+    const ticketId = parseInt(resolvedParams.id, 10);
 
     if (isNaN(ticketId)) {
       return NextResponse.json(

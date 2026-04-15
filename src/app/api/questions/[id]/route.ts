@@ -4,12 +4,12 @@ import { getQuestionById } from '@/lib/questions';
 export const runtime = 'edge';
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params;
-    const ticketId = parseInt(resolvedParams.id, 10);
+    const { id } = await params;
+    const ticketId = parseInt(id, 10);
 
     if (isNaN(ticketId)) {
       return NextResponse.json(
@@ -34,7 +34,11 @@ export async function GET(
   } catch (error) {
     console.error('Error fetching question:', error);
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
+      { 
+        success: false,
+        error: 'Internal server error',
+        debug: error instanceof Error ? error.message : String(error)
+      },
       { status: 500 }
     );
   }

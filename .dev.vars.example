@@ -1,0 +1,4 @@
+# Local development environment variables
+# Copy this to .dev.vars and update values
+
+JWT_SECRET=local-development-secret-change-in-production

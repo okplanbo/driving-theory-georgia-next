@@ -1,0 +1,10 @@
+name = "driving-theory-app"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+pages_build_output_dir = ".vercel/output/static"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "driving-theory-db"
+database_id = "c7f5755a-4a27-488f-9be2-d6b9888d4f26"

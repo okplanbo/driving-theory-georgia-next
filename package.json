@@ -12,7 +12,7 @@
     "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
     "pages:dev": "npx wrangler pages dev .vercel/output/static --compatibility-flag=nodejs_compat",
     "preview": "npm run pages:build && npm run pages:dev",
-    "db:migrate": "wrangler d1 execute driving-theory-db --file=./migrations/0001_initial.sql",
+    "db:migrate:remote": "wrangler d1 execute driving-theory-db --remote --file=./migrations/0001_initial.sql",
     "db:migrate:local": "wrangler d1 execute driving-theory-db --local --file=./migrations/0001_initial.sql"
   },
   "keywords": [

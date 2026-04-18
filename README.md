@@ -52,8 +52,8 @@ database_id = "your-database-id"
 
 4. Run database migrations:
 ```bash
-# For production
-npm run db:migrate
+# For production. (wrangler login first)
+npm run db:migrate:remote
 
 # For local development
 npm run db:migrate:local

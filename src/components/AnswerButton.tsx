@@ -73,11 +73,6 @@ export function AnswerButton({
 
       {/* Answer text */}
       <span className="flex-1">{text}</span>
-
-      {/* Keyboard hint */}
-      {!isRevealed && (
-        <span className="hidden sm:flex kbd opacity-50">{index}</span>
-      )}
     </button>
   );
 }

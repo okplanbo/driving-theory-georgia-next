@@ -1,5 +1,466 @@
 import { Question, Language } from './types';
-import questionsData from './data/questions.json';
+// import questionsData from './data/questions.json';
+
+const questionsData = [
+  {
+    "ticket_id": 1,
+    "question": {
+      "ka": "რომელი ავტომობილის მძღოლს წარმოექმნება გზის დათმობის ვალდებულება ისრის მიმართულებით მოძრაობის შემთხვევაში?",
+      "en": "Which vehicle driver is obliged to yield to another when driving to the arrow direction?",
+      "ru": "У водителя, какого автомобиля появляется обязательство уступить дорогу в случае передвижения по стрелке?"
+    },
+    "img": "f24b95a352dc25441ea2b32cb823623b",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "სატვირთო ავტომობილის მძღოლს",
+          "en": "Lorry driver",
+          "ru": "У водителя грузового автомобиля"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "მსუბუქი ავტომობილის მძღოლს",
+          "en": "Motor car driver",
+          "ru": "У водителя легкового автомобиля"
+        },
+        "is_correct": true
+      }
+    ]
+  },
+  {
+    "ticket_id": 2,
+    "question": {
+      "ka": "ვალდებულია თუ არა წითელი ავტომობილის მძღოლი, მიმდებარე ტერიტორიიდან გზაზე გასვლისას გზა დაუთმოს ქვეითებს?",
+      "en": "Is red car driver obliged to yield to the pedestrians when dricing from adjacent territory to the road?",
+      "ru": "Обязан или нет, водитель красного автомобиля, при выходе на дорогу с прилегающей территории уступить пешеходам дорогу?"
+    },
+    "img": "3901279bfb0b8ba384efab93b45e69c7",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "ვალდებულია",
+          "en": "Yes",
+          "ru": "Обязан"
+        },
+        "is_correct": true
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "არ არის ვალდებული",
+          "en": "No",
+          "ru": "Не обязан"
+        },
+        "is_correct": false
+      }
+    ]
+  },
+  {
+    "ticket_id": 4,
+    "question": {
+      "ka": "რომელი ავტომობილის მძოლს ენიჭება უპირატესობა ისრის მიმართულებით მოძრაობის შემთხვევაში?",
+      "en": "Which car driver has priority when driving to the arrow direction?",
+      "ru": "У водителя, какого транспортного средства присваивается преимущество в случае движения по направлению стрелки?"
+    },
+    "img": "3d3547b9cf89d34451ed9ccef0fe0f1c",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "ლურჯი ავტომობილის მძღოლს",
+          "en": "Blue car driver",
+          "ru": "У водителя синего автомобиля"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "თეთრი ავტომობილის მძღოლს",
+          "en": "White car driver",
+          "ru": "У водителя белого автомобиля"
+        },
+        "is_correct": true
+      }
+    ]
+  },
+  {
+    "ticket_id": 5,
+    "question": {
+      "ka": "რა თანამიმდევრობით უნდა გაიარონ გზაჯვარედინი ისრის მიმართულებით მოძრავმა ავტომობილებმა, თუ სასწრაფო სამედიცინო დახმარების ავტომობილს ჩართული აქვს ლურჯი მოელვარე სპეციალური ციმციმა და ხმოვანი სიგნალები?",
+      "en": "In what sequence should the vehicles pass the intersection to the arrow direction, if the ambulance has special blue flashing light and honks switched on?",
+      "ru": "В какой очередности должны проехать перекресток автомобили движущие по направлению стрелки, если у машины скорой помощи включена специальная проблесковая маячок синего цвета и звуковой сигнал?"
+    },
+    "img": "c673f95351dca30eb05681f5077cfa53",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს სასწრაფო სამედიცინო დახმარების ავტომობილმა, შემდეგ - მსუბუქმა ავტომობილმა და ბოლოს - სატვირთო ავტომობილმა",
+          "en": "First - ambulance, then - motor car and finally - lorry",
+          "ru": "Сперва должен проехать автомобиль скорой помощи, потом – легковой автомобиль и в конце – грузовой автомобиль"
+        },
+        "is_correct": true
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს სასწრაფო სამედიცინო დახმარების ავტომობილმა, შემდეგ - სატვირთო ავტომობილმა და ბოლოს - მსუბუქმა ავტომობილმა",
+          "en": "First - ambulance, then - lorry and finally - motor car",
+          "ru": "Сперва должен проехать автомобиль скорой помощи, потом – грузовой автомобиль и в конце – легковой автомобиль"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 3,
+        "text": {
+          "ka": "ჯერ გაიაროს მსუბუქმა ავტომობილმა, შემდეგ - სასწრაფო სამედიცინო დახმარების ავტომობილმა და ბოლოს სატვირთო ავტომობილმა",
+          "en": "First - motor car, then - ambulance and finally - lorry",
+          "ru": "Сперва должен проехать легковой автомобиль, потом – автомобиль скорой помощи и в конце – грузовой автомобиль"
+        },
+        "is_correct": false
+      }
+    ]
+  },
+  {
+    "ticket_id": 6,
+    "question": {
+      "ka": "რა თანამიმდევრობით უნდა გაიარონ გზაჯვარედინი ავტომობილებმა ისრის მიმართულებით მოძრაობის შემთხვევაში?",
+      "en": "In what sequence should the vehicles pass the intersection when driving to the arrow direction?",
+      "ru": "В какой очередности должны проехать автомобили перекресток в случае передвижения по направлению стрелки?"
+    },
+    "img": "77f726bef8f32a5e1290518e29980cc1",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს მსუბუქმა ავტომობილმა, შემდეგ - სატვირთო ავტომობილმა, ბოლოს - ავტობუსმა",
+          "en": "First - motor car, then - lorry and finally - bus",
+          "ru": "Сперва должен проехать легковой автомобиль, потом – грузовой автомобиль, в конце – автобус"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს სატვირთო ავტომობილმა, შემდეგ - ავტობუსმა, ბოლოს - მსუბუქმა ავტომობილმა",
+          "en": "First - lorry, then - bus and finally - motor car",
+          "ru": "Сперва должен проехать грузовой автомобиль, потом – автобус и в конце – легковой автомобиль"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 3,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს ავტობუსმა, შემდეგ - მსუბუქმა ავტომობილმა, ბოლოს - სატვირთო ავტომობილმა",
+          "en": "First - bus, then - motor car and finally - lorry",
+          "ru": "Сперва должен проехать автобус, потом – легковой автомобиль, в конце – грузовой автомобиль"
+        },
+        "is_correct": true
+      }
+    ]
+  },
+  {
+    "ticket_id": 7,
+    "question": {
+      "ka": "რა თანამიმდევრობით უნდა გაიარონ გზაჯვარედინი სატრანსპორტო საშუალებებმა ისრის მიმართულებით მოძრაობის შემთხვევაში?",
+      "en": "In what sequence should the vehicles pass the intersection when driving to the arrow direction?",
+      "ru": "В какой очередности должны проехать перекресток транспортные средства в случае движения по направлению стрелки?"
+    },
+    "img": "9a1e009e7ef6e3da9369223b546f1730",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს ავტობუსმა, შემდეგ - მოტოციკლმა, ბოლოს - მსუბუქმა ავტომობილმა",
+          "en": "First - bus, then - motorcycle and finally - motor car",
+          "ru": "Сперва должен проехать автобус, потом – мотоцикл, в конце – легковой автомобиль"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს მსუბუქმა ავტომობილმა, შემდეგ - ავტობუსმა, ბოლოს - მოტოციკლმა",
+          "en": "First - motor car, then - bus and finally - motorcycle",
+          "ru": "Сперва должен проехать легковой автомобиль, потом – автобус, в конце – мотоцикл"
+        },
+        "is_correct": true
+      },
+      {
+        "index": 3,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს მოტოციკლმა, შემდეგ - ავტობუსმა, ბოლოს - მსუბუქმა ავტომობილმა",
+          "en": "First - motorcycle, then - bus and finally - motor car",
+          "ru": "Сперва должен проехать мотоцикл, потом - автобус, в конце – легковой автомобиль"
+        },
+        "is_correct": false
+      }
+    ]
+  },
+  {
+    "ticket_id": 10,
+    "question": {
+      "ka": "მსუბუქი ავტომობილის მძღოლს უფლება აქვს მობრუნების მანევრი შეასრულოს:",
+      "en": "The motor car driver is allowed to perform U-turn maneuver:",
+      "ru": "Водитель легкового автомобиля имеет право исполнить маневр разворота:"
+    },
+    "img": "6d9b1fd3c78faaef3f782e8f4a283c1a",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "მხოლოდ A მიმართულებით",
+          "en": "In direction A only",
+          "ru": "В направлении А"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "მხოლოდ B მიმართულებით",
+          "en": "In direction B only",
+          "ru": "В направлении В"
+        },
+        "is_correct": true
+      },
+      {
+        "index": 3,
+        "text": {
+          "ka": "როგორც A, ასევე B მიმართულებით",
+          "en": "In both A and B directions",
+          "ru": "Как в направлении А, так же в направлении – В"
+        },
+        "is_correct": false
+      }
+    ]
+  },
+  {
+    "ticket_id": 13,
+    "question": {
+      "ka": "ისრების გადაკვეთის ადგილზე გზის დათმობის ვალდებულება წარმოექმნება:",
+      "en": "Which of the vehicle drivers is obliged to yield when crossing the place shown by the arrows of trajectories?",
+      "ru": "У водителя, какого транспортного средства возникает обязательство уступить дорогу, в случая пересечения на месте указанном стрелками траектории?"
+    },
+    "img": "321f4d57d580aaa58682476e7f2a591d",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "წითელი ავტომობილის მძღოლს",
+          "en": "Red car driver",
+          "ru": "У водителя крестного автомобиля"
+        },
+        "is_correct": true
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "ლურჯი ავტომობილის მძღოლს",
+          "en": "Blue car driver.",
+          "ru": "У водителя синего автомобиля"
+        },
+        "is_correct": false
+      }
+    ]
+  },
+  {
+    "ticket_id": 14,
+    "question": {
+      "ka": "აქვს თუ არა წითელი ავტომობილის მძღოლს ისრის მიმართულებით მოძრაობის გაგრძელების უფლება, თუ შუქნიშნის მწვანე მაშუქი სიგნალის შემდეგ, ყვითელი მაშუქი სიგნალის ჩართვისას მას არ შეეძლო „სდექ“ ხაზთან გაჩერება მკვეთრი დამუხრუჭების გარეშე?",
+      "en": "Is red car driver allowed to proceed to the arrow direction, if he/she could not stop at the “STOP” line without hard braking, by the time of switching the amber traffic light on after the green traffic light?",
+      "ru": "Имеет ли право, водитель красного автомобиля на продолжение движения по направлению стрелки, если после зеленного сигнала светофора, при включении желтого сигнала светофора без резкого торможения он не смог остановиться на «Стоп» линии?"
+    },
+    "img": "6cf54746857403e7caed949422f912f9",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "აქვს უფლება",
+          "en": "Yes",
+          "ru": "Имеет право"
+        },
+        "is_correct": true
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "არ აქვს უფლება",
+          "en": "No",
+          "ru": "Не имеет право"
+        },
+        "is_correct": false
+      }
+    ]
+  },
+  {
+    "ticket_id": 15,
+    "question": {
+      "ka": "რომელი სატრანსპორტო საშუალების მძღოლს ეკრძალებათ ისრის მიმართულებით მოძრაობა მარეგულირებლის ამ სიგნალზე?",
+      "en": "Which of the vehicle drivers is prohibited from proceeding to the arrow direction at this signal of the traffic controller?",
+      "ru": "Водителям, какого транспортного средства запрещается движение по направлению стрелки на этот знак регулировщика?"
+    },
+    "img": "172cb4b5ebaba8250b23ede0e2f26746",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "ტრამვაისა და მსუბუქი ავტომობილის მძღოლებს",
+          "en": "Tram and motor car drivers",
+          "ru": "Водителям трамвая и легкового автомобиля"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "ავტობუსისა და მსუბუქი ავტომობილის მძღოლებს",
+          "en": "Bus and motor car drivers",
+          "ru": "Водителям автобуса и легкового автомобиля"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 3,
+        "text": {
+          "ka": "ტრამვაისა და ავტობუსის მძღოლებს",
+          "en": "Tram and bus drivers.",
+          "ru": "Водителям трамвая и автобуса"
+        },
+        "is_correct": true
+      }
+    ]
+  },
+  {
+    "ticket_id": 17,
+    "question": {
+      "ka": "რა თანამიმდევრობით უნდა გაიარონ გზაჯვარედინი ისრის მიმართულებით მოძრავმა სატრანსპორტო საშუალებებმა, თუ ოპერატიული სამსახურის ავტომობილს ჩართული აქვს ლურჯი მოელვარე სპეციალური ციმციმა და ხმოვანი სიგნალები?",
+      "en": "In what sequence should the vehicles pass the intersection when driving to the arrow direction, if operative vehicle has special blue flashing light and honks switched on?",
+      "ru": "По какой очередности должны проехать перекресток транспортные средства движущие по направлению стрелки, если у автомобиля оперативной службы включена специальная проблесковая мигалка и звуковой сигнал?"
+    },
+    "img": "bd50517f07fe7d9c94001727eb5693ca",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს ოპერატიული სამსახურის ავტომობილმა, შემდეგ - მსუბუქმა ავტომობილმა, ბოლოს - სატვირთო ავტომობილმა",
+          "en": "First - operative vehicle, then - motor car and finally - lorry",
+          "ru": "Сперва должен проехать автомобиль оперативной службы, потом – легковой автомобиль, в конце – грузовой автомобиль"
+        },
+        "is_correct": true
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს ოპერატიული სამსახურის ავტომობილმა, შემდეგ - სატვირთო ავტომობილმა, ბოლოს - მსუბუქმა ავტომობილმა",
+          "en": "First - operative vehicle, then - lorry and finally - motor car",
+          "ru": "Сперва должен проехать автомобиль оперативной службы, потом – грузовой автомобиль в конце – легковой автомобиль"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 3,
+        "text": {
+          "ka": "ჯერ უნდა გაიაროს მსუბუქმა ავტომობილმა, შემდეგ - ოპერატიული სამსახურის ავტომობილმა, ბოლოს - სატვირთო ავტომობილმა",
+          "en": "First - motor car, then - operative vehicle and finally - lorry",
+          "ru": "Сперва должен проехать легковой автомобиль, потом – автомобиль оперативной службы, в конце – грузовой автомобиль"
+        },
+        "is_correct": false
+      }
+    ]
+  },
+  {
+    "ticket_id": 18,
+    "question": {
+      "ka": "რომელი ავტომობილის მძღოლი დაარღვევს საგზაო მოძრაობის წესებს ისრის მიმართულებით მოძრაობის შემთხვევაში მარეგულირებლის ამ სიგნალზე?",
+      "en": "Which car driver will violate the Highway Code in case of proceeding to the arrow direction at this signal of the traffic controller?",
+      "ru": "Водитель, какого из транспортных средств нарушит правила дорожного движения при движении по направлению стрелки на этот сигнал регулировщика?"
+    },
+    "img": "0b5a4e3f0d8846b6936fb2ba75b9dbe5",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "წითელი მსუბუქი ავტომობილის მძღოლი",
+          "en": "Red car driver",
+          "ru": "Водитель красного легкового автомобиля"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "ლურჯი მსუბუქი ავტომობილის მძღოლი",
+          "en": "Blue car driver",
+          "ru": "Водитель синего легкового автомобиля"
+        },
+        "is_correct": true
+      },
+      {
+        "index": 3,
+        "text": {
+          "ka": "თეთრი მსუბუქი ავტომობილის მძღოლი",
+          "en": "White car driver",
+          "ru": "Водитель белого легкового автомобиля"
+        },
+        "is_correct": false
+      }
+    ]
+  },
+  {
+    "ticket_id": 20,
+    "question": {
+      "ka": "რომელი სატრანსპორტო საშუალების მძღოლია ვალდებული, ისრის მიმართულებით მოძრაობის შემთხვევაში გზა დაუთმოს ქვეითებს?",
+      "en": "Which of the vehicle drivers is obliged to yield to the pedestrians in case of driving to the arrow direction?",
+      "ru": "Водитель, какого транспортного средства обязан в случае движения по направлению стрелки уступить дорогу пешеходам?"
+    },
+    "img": "23a5b6fbc746a000248ed840fedf9ab4",
+    "answers": [
+      {
+        "index": 1,
+        "text": {
+          "ka": "მხოლოდ სატვირთო ავტომობილის მძღოლი",
+          "en": "Lorry driver only",
+          "ru": "Только водитель грузового автомобиля"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 2,
+        "text": {
+          "ka": "მხოლოდ მსუბუქი ავტომობილის მძღოლი",
+          "en": "Motor car driver only",
+          "ru": "Только водитель легкового автомобиля"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 3,
+        "text": {
+          "ka": "მხოლოდ მოტოციკლის მძღოლი",
+          "en": "Motorcyclist only",
+          "ru": "Только водитель мотоцикла"
+        },
+        "is_correct": false
+      },
+      {
+        "index": 4,
+        "text": {
+          "ka": "სამივე სატრანსპორტო საშუალების მძღოლი",
+          "en": "All of them",
+          "ru": "Водители всех трех транспортных средств"
+        },
+        "is_correct": true
+      }
+    ]
+  }
+];
 
 // Load questions from static JSON
 const questions: Question[] = questionsData as Question[];

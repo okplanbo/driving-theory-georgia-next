@@ -11,7 +11,7 @@ export default function HomePage() {
       <header className="border-b">
         <div className="container flex h-14 items-center px-4 justify-self-center">
           <span className="text-xl mr-2">🚗</span>
-            <span className="font-semibold text-sm sm:text-base">Georgian Driving Theory</span>
+          <span className="font-semibold text-sm sm:text-base">Georgian Driving Theory</span>
           <div className="ml-auto flex items-center gap-2">
             <Link href="/login">
               <Button variant="ghost" size="sm">Login</Button>

@@ -11,7 +11,19 @@ interface GuestWarningBannerProps {
 }
 
 export function GuestWarningBanner({ className }: GuestWarningBannerProps) {
-  const [isDismissed, setIsDismissed] = useState(false);
+  const [isDismissed, setIsDismissed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('guestWarningDismissed') === 'true';
+    }
+    return false;
+  });
+
+    const handleDismiss = () => {
+      setIsDismissed(true);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('guestWarningDismissed', 'true');
+      }
+    };
 
   if (isDismissed) return null;
 
@@ -30,7 +42,7 @@ export function GuestWarningBanner({ className }: GuestWarningBannerProps) {
           variant="ghost"
           size="icon"
           className="h-6 w-6 shrink-0 ml-2"
-          onClick={() => setIsDismissed(true)}
+          onClick={handleDismiss}
         >
           <X className="h-4 w-4" />
         </Button>

@@ -21,6 +21,11 @@ export interface Question {
   explanation: LocalizedText;
 }
 
+export interface QuestionResponse extends Question {
+  prev_ticket_id: number;
+  next_ticket_id: number;
+}
+
 // Supported languages
 export type Language = 'ka' | 'en' | 'ru';
 

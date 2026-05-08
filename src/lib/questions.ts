@@ -1,5 +1,10 @@
-import { Question, Language } from './types';
+import { Question, Language, QuestionResponse } from './types';
 import questionsData from './data/questions.json';
+
+type PrevAndLastIds = {
+  prev_ticket_id: number;
+  next_ticket_id: number;
+};
 
 // Load questions from static JSON
 const questions: Question[] = questionsData as Question[];
@@ -13,8 +18,27 @@ export function getAllQuestions(): Question[] {
 }
 
 // Get a single question by ticket_id
-export function getQuestionById(ticketId: number): Question | null {
-  return questions.find((q) => q.ticket_id === ticketId) || null;
+export function getQuestionById(ticketId: number): QuestionResponse | null {
+  let questionIndex;
+
+  const question = questions.find((q, index) => {
+    if (q.ticket_id === ticketId) {
+      questionIndex = index;
+      return true;
+    } else {
+      return false;
+    }
+  });
+
+  if (question && typeof questionIndex === 'number') {
+    const { prev_ticket_id, next_ticket_id } = getPrevAndNextIds(questionIndex);
+    return {
+      ...question,
+      prev_ticket_id,
+      next_ticket_id
+    };
+  }
+  return null;
 }
 
 // Get questions in a range (inclusive)
@@ -25,7 +49,7 @@ export function getQuestionsInRange(start: number, end: number): Question[] {
 }
 
 // Get a random question, optionally excluding certain ticket_ids
-export function getRandomQuestion(excludeIds: number[] = []): Question | null {
+export function getRandomQuestion(excludeIds: number[] = []): QuestionResponse | null {
   const available = questions.filter(
     (q) => !excludeIds.includes(q.ticket_id)
   );
@@ -35,7 +59,12 @@ export function getRandomQuestion(excludeIds: number[] = []): Question | null {
   }
   
   const randomIndex = Math.floor(Math.random() * available.length);
-  return available[randomIndex];
+  const { prev_ticket_id, next_ticket_id } = getPrevAndNextIds(randomIndex);
+  return {
+    ...available[randomIndex],
+    prev_ticket_id,
+    next_ticket_id
+  };
 }
 
 // Get a weighted random question (for prioritizing weak questions)
@@ -43,7 +72,7 @@ export function getWeightedRandomQuestion(
   excludeIds: number[] = [],
   priorityIds: number[] = [],
   priorityWeight: number = 3
-): Question | null {
+): QuestionResponse | null {
   const available = questions.filter(
     (q) => !excludeIds.includes(q.ticket_id)
   );
@@ -66,10 +95,16 @@ export function getWeightedRandomQuestion(
   }
   
   const randomIndex = Math.floor(Math.random() * weightedPool.length);
-  return weightedPool[randomIndex];
+  const { prev_ticket_id, next_ticket_id } = getPrevAndNextIds(questions.indexOf(weightedPool[randomIndex]));
+  return {
+    ...weightedPool[randomIndex],
+    prev_ticket_id,
+    next_ticket_id
+  };
 }
 
 // Get random questions for exam (30 questions, no exclusions)
+// TODO: implement categorization and ensure balanced coverage of topics
 export function getExamQuestions(count: number = 30): Question[] {
   const shuffled = [...questions].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, Math.min(count, questions.length));
@@ -108,25 +143,17 @@ export function getQuestionsByIds(ticketIds: number[]): Question[] {
   return questions.filter((q) => ticketIds.includes(q.ticket_id));
 }
 
-// Get next question ID (for sequential navigation)
-export function getNextQuestionId(currentId: number): number | null {
-  const currentIndex = questions.findIndex((q) => q.ticket_id === currentId);
-  if (currentIndex === -1 || currentIndex === questions.length - 1) {
-    return null;
-  }
-  return questions[currentIndex + 1].ticket_id;
-}
+function getPrevAndNextIds(index: number): PrevAndLastIds {
+  const isLast = index === questions.length - 1;
+  const isFirst = index === 0;
 
-// Get previous question ID (for sequential navigation)
-export function getPreviousQuestionId(currentId: number): number | null {
-  const currentIndex = questions.findIndex((q) => q.ticket_id === currentId);
-  if (currentIndex <= 0) {
-    return null;
-  }
-  return questions[currentIndex - 1].ticket_id;
-}
+  const prev_ticket_id = isFirst
+    ? questions[questions.length - 1].ticket_id
+    : questions[index - 1].ticket_id;
+  
+  const next_ticket_id = isLast
+    ? questions[0].ticket_id
+    : questions[index + 1].ticket_id;
 
-// Get all ticket IDs
-export function getAllTicketIds(): number[] {
-  return questions.map((q) => q.ticket_id);
+  return { prev_ticket_id, next_ticket_id };
 }

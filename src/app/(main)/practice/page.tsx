@@ -6,7 +6,7 @@ import { QuestionCard } from '@/components/QuestionCard';
 import { GuestWarningBanner } from '@/components/GuestWarningBanner';
 import { useAuth } from '@/hooks/useAuth';
 import { useProgress } from '@/hooks/useProgress';
-import { ApiResponse, Question } from '@/lib/types';
+import { ApiResponse, Question, QuestionResponse } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { BASE_QUESTION_COUNT } from '@/constants';
 
@@ -26,7 +26,7 @@ function PracticeContent() {
   const { isAuthenticated, isLoading: authLoading, preferences } = useAuth();
   const { isFavorite, isExcluded, toggleFavorite, toggleExcluded, recordAnswer } = useProgress();
 
-  const [question, setQuestion] = useState<Question | null>(null);
+  const [question, setQuestion] = useState<QuestionResponse | null>(null);
   const [totalQuestions, setTotalQuestions] = useState(BASE_QUESTION_COUNT);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +41,7 @@ function PracticeContent() {
 
     try {
       const response = await fetch(`/api/questions/${id}`);
-      const data: ApiResponse<Question> = await response.json();
+      const data: ApiResponse<QuestionResponse> = await response.json();
 
       if (data.success) {
         setQuestion(data.data!);
@@ -63,19 +63,17 @@ function PracticeContent() {
 
     try {
       const response = await fetch('/api/questions/random');
-      const data: ApiResponse<Question> = await response.json();
+      const data: ApiResponse<QuestionResponse> = await response.json();
 
       if (data.success) {
-        setQuestion(data.data!);
-        // Update URL without triggering navigation
         router.replace(`/practice?id=${data.data!.ticket_id}`, { scroll: false });
       } else {
         setError(data.error || 'Failed to load question');
+        setIsLoading(false);
       }
     } catch (err) {
       console.error('Error fetching random question:', err);
       setError('Failed to load question. Please try again.');
-    } finally {
       setIsLoading(false);
     }
   }, [router]);
@@ -89,14 +87,14 @@ function PracticeContent() {
 
   // Navigation handlers
   const handleNext = useCallback(() => {
-    if (question && question.ticket_id < totalQuestions) {
-      router.push(`/practice?id=${question.ticket_id + 1}`);
+    if (question) {
+      router.push(`/practice?id=${question.next_ticket_id}`);
     }
-  }, [question, totalQuestions, router]);
+  }, [question, router]);
 
   const handlePrevious = useCallback(() => {
-    if (question && question.ticket_id > 1) {
-      router.push(`/practice?id=${question.ticket_id - 1}`);
+    if (question && question.prev_ticket_id) {
+      router.push(`/practice?id=${question.prev_ticket_id}`);
     }
   }, [question, router]);
 
@@ -139,13 +137,19 @@ function PracticeContent() {
   if (error) {
     return (
       <div className="container max-w-2xl mx-auto px-4 py-8">
-        <div className="text-center">
+        <div className="text-center gap-4 flex flex-col items-center">
           <p className="text-destructive mb-4">{error}</p>
           <button
-            onClick={() => fetchQuestion(questionId)}
+            onClick={() => router.back()}
             className="text-primary hover:underline"
           >
-            Try again
+            Go back
+          </button>
+          <button
+            onClick={fetchRandomQuestion}
+            className="text-primary hover:underline"
+          >
+            Get random question
           </button>
         </div>
       </div>
@@ -178,8 +182,8 @@ function PracticeContent() {
         isExcluded={isExcluded(question.ticket_id)}
         isAuthenticated={isAuthenticated}
         onAnswer={handleAnswer}
-        onNext={question.ticket_id < totalQuestions ? handleNext : undefined}
-        onPrevious={question.ticket_id > 1 ? handlePrevious : undefined}
+        onNext={handleNext}
+        onPrevious={handlePrevious}
         onRandom={fetchRandomQuestion}
         onToggleFavorite={handleToggleFavorite}
         onToggleExcluded={handleToggleExcluded}

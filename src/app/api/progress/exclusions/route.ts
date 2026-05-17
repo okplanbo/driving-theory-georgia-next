@@ -32,14 +32,25 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const includeQuestions = searchParams.get('includeQuestions') === 'true';
     const language = (searchParams.get('lang') || 'en') as Language;
+    const page = Number(searchParams.get('page'));
+    const limit = Number(searchParams.get('limit'));
+    const hasPagination =
+      Number.isInteger(page) && page > 0 && Number.isInteger(limit) && limit > 0;
 
     const excludedIds = await getExcludedIds(env.DB, payload.userId);
 
     if (includeQuestions) {
-      const questions = getQuestionsByIds(excludedIds);
+      const total = excludedIds.length;
+      const paginatedIds = hasPagination
+        ? excludedIds.slice((page - 1) * limit, page * limit)
+        : excludedIds;
+
+      const questions = getQuestionsByIds(paginatedIds);
       const questionsWithPreview = questions.map((q) => ({
         ticketId: q.ticket_id,
-        questionPreview: q.question[language].substring(0, 80) + (q.question[language].length > 80 ? '...' : ''),
+        questionPreview:
+          q.question[language].substring(0, 80) +
+          (q.question[language].length > 80 ? '...' : ''),
       }));
 
       return NextResponse.json({
@@ -47,6 +58,7 @@ export async function GET(request: NextRequest) {
         data: {
           excludedIds,
           questions: questionsWithPreview,
+          total,
         },
       });
     }

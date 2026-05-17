@@ -117,7 +117,7 @@ export default function StatsPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card onClick={() => router.push('/excluded')} className="cursor-pointer">
           <CardContent className="p-4 text-center">
             <EyeOff className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
             <div className="text-2xl font-bold">{stats.excludedCount}</div>
